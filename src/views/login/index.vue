@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">美小厨后台管理系统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -141,6 +141,8 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+  background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1602083592774&di=e7610da0de702f34c61c0257d96af385&imgtype=0&src=http%3A%2F%2Fimg1.imgtn.bdimg.com%2Fit%2Fu%3D2887465746%2C1213694016%26fm%3D214%26gp%3D0.jpg');
+  background-size: 100% 100%;
   .el-input {
     display: inline-block;
     height: 47px;

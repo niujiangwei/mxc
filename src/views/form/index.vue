@@ -1,85 +1,119 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-        </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
+     <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      label="订单编号"
+      prop="id">
+    </el-table-column>
+    
+    <el-table-column
+      label="地址id"
+      prop="addressId">
+    </el-table-column>
+    <el-table-column
+      label="total"
+      prop="total">
+     
+    </el-table-column>
+     <el-table-column
+      label="订单状态"
+      prop="status">
+     
+    </el-table-column>
+    <el-table-column
+      label="价格"
+      prop="price">
+     
+    </el-table-column>
+    <el-table-column
+      align="right">
+      
+      <template slot="header" >
+        <input
+          v-model="search"
+          size="mini"
+        @input="test(search)"
+          placeholder="输入订单编号搜索"/>
+      </template>
+     <!-- 绑定一个方法给enter事件,获取到输入的值,调接口查询.返回值给table -->
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          @click="handleEdit(scope.$index, scope.row.id)">Edit</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+    
   </div>
 </template>
 
 <script>
+import Axios from 'axios';
+import { post,get} from '@/utils/axios'
+
 export default {
+ 
   data() {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
+     tableData: [],
+        search: '',
+       
     }
   },
+  created() {
+   
+  },
+  created(){
+   this. findall()
+  },
   methods: {
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    }
+     handleEdit(index, id) {
+       
+        //  Axios({url:"http://47.106.244.1:5588 /order/save ",
+        //        method:"post",
+        //        id
+        //         }).then((res)=>{
+        //           console.log(res.status);
+        //         })
+         
+        
+      },
+      handleDelete(index, id) {
+       Axios({url:"http://47.106.244.1:5588/order/deleteById",
+               
+                }).then((res)=>{
+                  console.log(res.status);
+                })
+      },
+      findall(){
+        post("http://47.106.244.1:5588/order/queryPage",
+                {
+          page:"2",
+          pageSize:"5",
+        } 
+              
+                ).then((res)=>{
+                  this.tableData = res.data.list
+                  console.log(res.data.list);
+                })
+      },
+      test(search){
+         Axios({url:"http://47.106.244.1:5588/order/getOrderLinesByOrderId?orderId="+search,
+         
+               
+                }).then((res)=>{
+                  this.tableData = res.data.data
+                  console.log(res.data.data);
+                })
+       
+
+      }
   }
 }
 </script>
-
-<style scoped>
-.line{
-  text-align: center;
-}
-</style>
-

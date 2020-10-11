@@ -6,7 +6,7 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: 'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1490694434,2622882882&fm=26&gp=0.jpg'
   }
 }
 
@@ -32,10 +32,12 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      // 进行登录发送信息的方法
+      login({ username: username.trim(), password: password,type:"manager" }).then(response => {
         const { data } = response
+        // 如果登陆成功,那么把返回的token进行保存
         commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        setToken(data.data.token)
         resolve()
       }).catch(error => {
         reject(error)
